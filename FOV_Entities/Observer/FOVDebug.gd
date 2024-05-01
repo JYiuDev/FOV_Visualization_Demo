@@ -6,10 +6,10 @@ extends Node2D
 func _draw():
 	
 	#draw circle depending on FOV viewRadius
-	draw_arc(position, fow.viewRadius, 0, 2 * PI, 90, Color.ALICE_BLUE)
+	draw_arc(position, fow.viewRadius, 0, 2 * PI, 90, Color.WHITE)
 	
-	var angle_test: Vector2 = Vector2(cos(90*PI), sin(90*PI)).normalized()
-	draw_line(position, position + angle_test * fow.viewRadius, Color.RED)
+	draw_line(position, fow.dirFromAngle(-fow.viewAngle/2, true) * fow.viewRadius, Color.WHITE)
+	draw_line(position, fow.dirFromAngle(fow.viewAngle/2 , true) * fow.viewRadius, Color.WHITE)
 
 func _process(_delta):
 	queue_redraw()

@@ -11,5 +11,6 @@ config_version=5
 [application]
 
 config/name="FOV_Visualization_Demo"
+run/main_scene="res://FOV_Entities/Observer/character.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
