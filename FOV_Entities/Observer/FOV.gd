@@ -1,8 +1,10 @@
 @tool
 extends Node2D
 class_name FOV
+
 @export var viewRadius: float 
 @export var viewAngle:  float
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -21,3 +23,11 @@ func dirFromAngle(angleInDegree: float, global: bool) -> Vector2:
 		
 	var radians: float = (angleInDegree - 90) * PI/180
 	return Vector2(cos(radians), sin(radians))
+
+func FindTargets():
+	var space_state = get_world_2d().direct_space_state
+	var query:PhysicsShapeQueryParameters2D = PhysicsShapeQueryParameters2D.new()
+	var shape:CircleShape2D = CircleShape2D.new()
+	shape.radius = viewRadius
+	query.set_shape(shape)
+	

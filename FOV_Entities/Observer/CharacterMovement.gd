@@ -1,7 +1,7 @@
-@tool
 extends CharacterBody2D
 
-@export_range(0,500) var moveSpeed: float 
+@export_range(0,500) var moveSpeed: float
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -11,6 +11,11 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	faceMouse()
+	
+	
+func _physics_process(delta):
+	var input_direction = Input.get_vector("Left", "Right", "Up", "Down")
+	velocity = input_direction * moveSpeed
 	move_and_slide()
 
 
