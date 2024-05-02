@@ -1,3 +1,18 @@
-[gd_scene format=3 uid="uid://coudtlyh73adb"]
+[gd_scene load_steps=3 format=3 uid="uid://coudtlyh73adb"]
+
+[ext_resource type="PackedScene" uid="uid://k68dj1602unv" path="res://FOV_Entities/Observer/character.tscn" id="1_ja7ih"]
+[ext_resource type="PackedScene" uid="uid://d0tbbul4wbhjf" path="res://FOV_Entities/Targets/target.tscn" id="2_us1wp"]
 
 [node name="Stage" type="Node2D"]
+
+[node name="Character" parent="." instance=ExtResource("1_ja7ih")]
+position = Vector2(123, 88)
+
+[node name="Target" parent="." instance=ExtResource("2_us1wp")]
+position = Vector2(114, 253)
+
+[node name="Target2" parent="." instance=ExtResource("2_us1wp")]
+position = Vector2(285, 113)
+
+[node name="Target3" parent="." instance=ExtResource("2_us1wp")]
+position = Vector2(411, 284)

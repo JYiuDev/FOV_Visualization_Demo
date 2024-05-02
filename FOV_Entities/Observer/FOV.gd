@@ -5,15 +5,16 @@ class_name FOV
 @export var viewRadius: float 
 @export var viewAngle:  float
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	pass 
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	pass
+func _physics_process(_delta):
+	if InputMap.has_action("GWord"):
+		if Input.is_action_just_pressed("GWord"):
+			FindTargets()
 
 
 # Takes in angle and spits out local relative vector, UP is 0
@@ -25,9 +26,12 @@ func dirFromAngle(angleInDegree: float, global: bool) -> Vector2:
 	return Vector2(cos(radians), sin(radians))
 
 func FindTargets():
-	var space_state = get_world_2d().direct_space_state
+	var physics = get_world_2d().direct_space_state
 	var query:PhysicsShapeQueryParameters2D = PhysicsShapeQueryParameters2D.new()
 	var shape:CircleShape2D = CircleShape2D.new()
 	shape.radius = viewRadius
 	query.set_shape(shape)
-	
+	query.set_transform(global_transform)
+	query.set_collision_mask(0b110)
+	var result = physics.intersect_shape(query)
+	#print(result)

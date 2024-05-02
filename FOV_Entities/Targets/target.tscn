@@ -1,11 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://dufm7hl1icvwg"]
+[gd_scene load_steps=3 format=3 uid="uid://d0tbbul4wbhjf"]
 
 [ext_resource type="Texture2D" uid="uid://cbkmghmkq1lxn" path="res://icon.svg" id="2_lgupw"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_bylnx"]
-radius = 18.15
+[sub_resource type="CircleShape2D" id="CircleShape2D_bpcps"]
+radius = 18.0306
 
-[node name="Character" type="CharacterBody2D"]
+[node name="Target" type="CharacterBody2D"]
 scale = Vector2(0.999845, 0.999845)
 collision_layer = 4
 collision_mask = 0
@@ -16,5 +16,4 @@ scale = Vector2(0.3, 0.3)
 texture = ExtResource("2_lgupw")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-shape = SubResource("CircleShape2D_bylnx")
+shape = SubResource("CircleShape2D_bpcps")

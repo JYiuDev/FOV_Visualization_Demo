@@ -10,7 +10,7 @@ radius = 18.15
 
 [node name="Character" type="CharacterBody2D"]
 scale = Vector2(0.999845, 0.999845)
-collision_mask = 2
+collision_mask = 6
 script = ExtResource("1_px71a")
 moveSpeed = 180.0
 
