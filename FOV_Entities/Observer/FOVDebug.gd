@@ -1,4 +1,3 @@
-@tool
 extends Node2D
 
 @export var fow: FOV
@@ -13,3 +12,10 @@ func _draw():
 
 func _process(_delta):
 	queue_redraw()
+	
+	
+
+func drawVisibleTargets():
+	#loop through array
+	for targets:Dictionary in fow.targetsInRange:
+		print(targets["collider"])
