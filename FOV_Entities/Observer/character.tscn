@@ -15,6 +15,7 @@ script = ExtResource("1_px71a")
 moveSpeed = 180.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = 1.5708
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("1_vhn2i")
 

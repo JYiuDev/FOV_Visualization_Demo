@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://b8l5anamht3f4"]
+
+[ext_resource type="Texture2D" uid="uid://cbkmghmkq1lxn" path="res://icon.svg" id="1_uwyyv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jbwba"]
+size = Vector2(36.0056, 36.0056)
+
+[node name="Obtacle" type="StaticBody2D"]
+scale = Vector2(0.999845, 0.999845)
+disable_mode = 1
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 1)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("1_uwyyv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1.90735e-06)
+shape = SubResource("RectangleShape2D_jbwba")

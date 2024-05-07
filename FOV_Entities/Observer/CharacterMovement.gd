@@ -20,5 +20,5 @@ func _physics_process(delta):
 
 
 func faceMouse():
-	var angle = rotation + get_angle_to(get_global_mouse_position()) + deg_to_rad(90)
+	var angle = rotation + get_angle_to(get_global_mouse_position())
 	rotation = angle

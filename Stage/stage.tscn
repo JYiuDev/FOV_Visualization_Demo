@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://coudtlyh73adb"]
+[gd_scene load_steps=4 format=3 uid="uid://coudtlyh73adb"]
 
 [ext_resource type="PackedScene" uid="uid://k68dj1602unv" path="res://FOV_Entities/Observer/character.tscn" id="1_ja7ih"]
 [ext_resource type="PackedScene" uid="uid://dufm7hl1icvwg" path="res://FOV_Entities/Targets/target.tscn" id="2_us1wp"]
+[ext_resource type="PackedScene" uid="uid://b8l5anamht3f4" path="res://FOV_Entities/Obstacles/Obstacle.tscn" id="3_yqo61"]
 
 [node name="Stage" type="Node2D"]
 
@@ -19,5 +20,10 @@ position = Vector2(285, 113)
 
 [node name="Target3" parent="." instance=ExtResource("2_us1wp")]
 position = Vector2(411, 284)
+
+[node name="Obtacle" parent="." instance=ExtResource("3_yqo61")]
+position = Vector2(289, 167)
+scale = Vector2(4.99984, 0.999845)
+disable_mode = 0
 
 [editable path="Character"]

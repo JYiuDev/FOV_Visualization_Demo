@@ -1,7 +1,9 @@
 extends Node2D
 
 @export var fow: FOV
-
+func _ready():
+	drawRayAarray()
+	
 func _draw():
 	
 	#draw circle depending on FOV viewRadius
@@ -19,3 +21,19 @@ func drawVisibleTargets():
 	#loop through array
 	for targets:Dictionary in fow.targetsInRange:
 		print(targets["collider"])
+
+func drawRayAarray():
+	var rayNumber:int = roundi(fow.viewAngle * fow.raycastResolution)
+	print(rayNumber)
+	
+	#Instantiate array of Vector2, the array size will be rayNumber + 2 (for the outer most lines)
+	var rayArray: Array
+	var step: float = fow.viewAngle / rayNumber
+	
+	for i in (rayNumber + 2):
+		#print("i is: " + str(i))
+		#print("Current angle: " + str(i * step))
+		var angle = i * step
+		var dir = fow.dirFromAngle((-fow.viewAngle / 2) + angle, false)
+		
+		

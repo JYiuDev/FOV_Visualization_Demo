@@ -5,6 +5,9 @@ class_name FOV
 @export var viewAngle:  float
 
 @export_range(0.01, 1) var findTargetFrequency: float = 0.5
+@export_range(0.01, 1) var raycastResolution: float   = 0.01
+
+
 var targetsInRange: 	Array = []
 var targetsInVision:	Array = []
 
@@ -39,7 +42,7 @@ func FindTargets(time:float):
 	
 	targetsInVision.clear()
 	for targets:Dictionary in targetsInRange:
-		var target: CharacterBody2D = targets["collider"]
+		var target = targets["collider"]
 		var origin: Vector2 = global_position
 		var end: Vector2 = target.global_position
 		var raycastQuery: PhysicsRayQueryParameters2D = PhysicsRayQueryParameters2D.create(origin,end,0b110,[self])
@@ -57,5 +60,5 @@ func dirFromAngle(angleInDegree: float, global: bool) -> Vector2:
 	if not global:
 		angleInDegree += rad_to_deg(transform.get_rotation()) 
 		
-	var radians: float = (angleInDegree - 90) * PI/180
+	var radians: float = (angleInDegree) * PI/180
 	return Vector2(cos(radians), sin(radians))
