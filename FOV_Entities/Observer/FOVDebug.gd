@@ -2,7 +2,7 @@ extends Node2D
 
 @export var fow: FOV
 func _ready():
-	drawRayAarray()
+	pass
 	
 func _draw():
 	
@@ -11,6 +11,7 @@ func _draw():
 	
 	draw_line(position, fow.dirFromAngle(-fow.viewAngle/2, true) * fow.viewRadius, Color.WHITE)
 	draw_line(position, fow.dirFromAngle(fow.viewAngle/2 , true) * fow.viewRadius, Color.WHITE)
+	drawRayAarray()
 
 func _process(_delta):
 	queue_redraw()
@@ -24,16 +25,14 @@ func drawVisibleTargets():
 
 func drawRayAarray():
 	var rayNumber:int = roundi(fow.viewAngle * fow.raycastResolution)
-	print(rayNumber)
 	
 	#Instantiate array of Vector2, the array size will be rayNumber + 2 (for the outer most lines)
 	var rayArray: Array
-	var step: float = fow.viewAngle / rayNumber
+	var step: float = fow.viewAngle / (rayNumber + 2)
 	
 	for i in (rayNumber + 2):
 		#print("i is: " + str(i))
 		#print("Current angle: " + str(i * step))
 		var angle = i * step
-		var dir = fow.dirFromAngle((-fow.viewAngle / 2) + angle, false)
-		
-		
+		var dir = fow.dirFromAngle((-fow.viewAngle / 2) + angle, true)
+		draw_line(position, dir * fow.viewRadius * 2, Color.GREEN)
