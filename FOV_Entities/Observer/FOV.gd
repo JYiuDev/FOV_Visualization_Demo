@@ -1,13 +1,12 @@
 extends Node2D
 class_name FOV
 
+@export_category("FOV properties")
 @export var viewRadius: float 
 @export var viewAngle:  float
 
 @export_range(0.01, 1) var findTargetFrequency: float = 0.5
 @export_range(0.01, 1) var raycastResolution: float   = 0.01
-
-
 var targetsInRange: 	Array = []
 var targetsInVision:	Array = []
 
@@ -24,9 +23,12 @@ func _draw():
 	if targetsInVision.size() > 0:
 		for target in targetsInVision:
 			var degreeToTarget = get_angle_to(target.global_position)
-			var dirToTarget    = Vector2(cos(degreeToTarget), sin(degreeToTarget))
-			var disToTarget    = global_position.distance_to(target.global_position)
-			draw_line(position, dirToTarget * disToTarget, Color.RED)
+			if (rad_to_deg(degreeToTarget) >= -viewAngle/2) and (rad_to_deg(degreeToTarget) <= viewAngle/2):
+				var dirToTarget    = Vector2(cos(degreeToTarget), sin(degreeToTarget))
+				var disToTarget    = global_position.distance_to(target.global_position)
+				draw_line(position, dirToTarget * disToTarget, Color.RED)
+	RaycastAarray()
+	
 
 func FindTargets(time:float):
 	var physics = get_world_2d().direct_space_state
@@ -39,8 +41,8 @@ func FindTargets(time:float):
 	var result = physics.intersect_shape(shapCastQuery)
 	targetsInRange.clear()
 	targetsInRange = result
-	
 	targetsInVision.clear()
+	
 	for targets:Dictionary in targetsInRange:
 		var target = targets["collider"]
 		var origin: Vector2 = global_position
@@ -62,3 +64,27 @@ func dirFromAngle(angleInDegree: float, global: bool) -> Vector2:
 		
 	var radians: float = (angleInDegree) * PI/180
 	return Vector2(cos(radians), sin(radians))
+	
+func RaycastAarray():
+	var rayNumber:int = roundi(viewAngle * raycastResolution)
+	
+	#Instantiate array of Vector2, the array size will be rayNumber + 2 (for the outer most lines)
+	var rayArray: Array
+	var step: float = viewAngle / (rayNumber + 1)
+
+	for i in (rayNumber + 2):
+		#print("i is: " + str(i))
+		#print("Current angle: " + str(i * step))
+		var angle = i * step
+		var dir = dirFromAngle((-viewAngle / 2) + angle, true)
+		var physics = get_world_2d().direct_space_state
+		var rayQuery = PhysicsRayQueryParameters2D.create(global_position, global_position + dir * viewRadius,0b110, [self])
+		var result = physics.intersect_ray(rayQuery)
+		if result.is_empty():
+			draw_line(position, dir * viewRadius, Color.HONEYDEW)
+		else:
+			draw_line(position, result["position"] - global_position, Color.ORANGE)
+		
+		
+#Subclass for RaycastInformation
+
