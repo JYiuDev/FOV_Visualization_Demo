@@ -11,7 +11,7 @@ position = Vector2(123, 88)
 
 [node name="FOV" parent="Character" index="2"]
 findTargetFrequency = 0.1
-raycastResolution = 0.1
+raycastResolution = 0.305
 
 [node name="Target" parent="." instance=ExtResource("2_us1wp")]
 position = Vector2(114, 253)

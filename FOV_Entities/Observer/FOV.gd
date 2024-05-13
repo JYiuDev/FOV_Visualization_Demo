@@ -56,15 +56,6 @@ func FindTargets(time:float):
 	await get_tree().create_timer(time).timeout
 	FindTargets(time)
 	
-	
-# Takes in angle and spits out local relative vector, UP is 0
-func dirFromAngle(angleInDegree: float, global: bool) -> Vector2:
-	if not global:
-		angleInDegree += rad_to_deg(transform.get_rotation()) 
-		
-	var radians: float = (angleInDegree) * PI/180
-	return Vector2(cos(radians), sin(radians))
-	
 func RaycastAarray():
 	var rayNumber:int = roundi(viewAngle * raycastResolution)
 	
@@ -76,15 +67,21 @@ func RaycastAarray():
 		#print("i is: " + str(i))
 		#print("Current angle: " + str(i * step))
 		var angle = i * step
-		var dir = dirFromAngle((-viewAngle / 2) + angle, true)
+		var dir  = dirFromAngle((-viewAngle / 2) + angle, false)
+		var dir_global = dirFromAngle((-viewAngle / 2) + angle, true)
 		var physics = get_world_2d().direct_space_state
-		var rayQuery = PhysicsRayQueryParameters2D.create(global_position, global_position + dir * viewRadius,0b110, [self])
+		var rayQuery = PhysicsRayQueryParameters2D.create(global_position, global_position + dir * viewRadius, 0b110, [self])
 		var result = physics.intersect_ray(rayQuery)
 		if result.is_empty():
-			draw_line(position, dir * viewRadius, Color.HONEYDEW)
+			draw_line(position, dir_global * viewRadius, Color.HONEYDEW)
 		else:
-			draw_line(position, result["position"] - global_position, Color.ORANGE)
+			draw_line(position, dir_global * global_position.distance_to(result["position"]), Color.ORANGE)
 		
 		
-#Subclass for RaycastInformation
-
+# Takes in angle and spits out local relative vector, UP is 0
+func dirFromAngle(angleInDegree: float, global: bool) -> Vector2:
+	if not global:
+		angleInDegree += global_rotation_degrees
+		
+	var radians: float = (angleInDegree) * PI/180
+	return Vector2(cos(radians), sin(radians))
