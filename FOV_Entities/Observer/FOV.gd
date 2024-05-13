@@ -10,9 +10,16 @@ class_name FOV
 var targetsInRange: 	Array = []
 var targetsInVision:	Array = []
 
+var viewcastInfo_mold:  Dictionary = {
+	"origin" : Vector2.ZERO,
+	"end"    : Vector2.ZERO,
+	"position": Vector2.ZERO,
+	
+}
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	FindTargets(findTargetFrequency)
+	viewcastInfo.new()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -85,3 +92,17 @@ func dirFromAngle(angleInDegree: float, global: bool) -> Vector2:
 		
 	var radians: float = (angleInDegree) * PI/180
 	return Vector2(cos(radians), sin(radians))
+			draw_line(position, result["position"] - global_position, Color.ORANGE)
+
+
+func newViewCastInfo(origin: Vector2, end: Vector2) -> Dictionary:
+	var result:Dictionary = {}
+	result = viewcastInfo_mold.duplicate()
+	return result
+
+#Subclass for RaycastInformation
+class viewcastInfo :
+	var origin: Vector2
+	var end   : Vector2
+	var position: Vector2
+	
