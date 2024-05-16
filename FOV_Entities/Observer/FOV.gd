@@ -7,19 +7,12 @@ class_name FOV
 
 @export_range(0.01, 1) var findTargetFrequency: float = 0.5
 @export_range(0.01, 1) var raycastResolution: float   = 0.01
+
 var targetsInRange: 	Array = []
 var targetsInVision:	Array = []
-
-var viewcastInfo_mold:  Dictionary = {
-	"origin" : Vector2.ZERO,
-	"end"    : Vector2.ZERO,
-	"position": Vector2.ZERO,
-	
-}
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	FindTargets(findTargetFrequency)
-	viewcastInfo.new()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -27,6 +20,7 @@ func _process(_delta):
 	queue_redraw()
 	
 func _draw():
+	#Draw red line to enemy in sight
 	if targetsInVision.size() > 0:
 		for target in targetsInVision:
 			var degreeToTarget = get_angle_to(target.global_position)
@@ -62,7 +56,7 @@ func FindTargets(time:float):
 	#print(targetsInRange)
 	await get_tree().create_timer(time).timeout
 	FindTargets(time)
-	
+			
 func RaycastAarray():
 	var rayNumber:int = roundi(viewAngle * raycastResolution)
 	
@@ -74,17 +68,14 @@ func RaycastAarray():
 		#print("i is: " + str(i))
 		#print("Current angle: " + str(i * step))
 		var angle = i * step
-		var dir  = dirFromAngle((-viewAngle / 2) + angle, false)
-		var dir_global = dirFromAngle((-viewAngle / 2) + angle, true)
-		var physics = get_world_2d().direct_space_state
-		var rayQuery = PhysicsRayQueryParameters2D.create(global_position, global_position + dir * viewRadius, 0b110, [self])
-		var result = physics.intersect_ray(rayQuery)
-		if result.is_empty():
-			draw_line(position, dir_global * viewRadius, Color.HONEYDEW)
+		var viewcast:viewcastInfo = ViewCastInfo(angle)
+		if viewcast.hit:
+			draw_line(position, viewcast.point, Color.MEDIUM_VIOLET_RED)
 		else:
-			draw_line(position, dir_global * global_position.distance_to(result["position"]), Color.ORANGE)
-		
-		
+			draw_line(position, viewcast.point, Color.BLACK)
+
+
+
 # Takes in angle and spits out local relative vector, UP is 0
 func dirFromAngle(angleInDegree: float, global: bool) -> Vector2:
 	if not global:
@@ -92,17 +83,52 @@ func dirFromAngle(angleInDegree: float, global: bool) -> Vector2:
 		
 	var radians: float = (angleInDegree) * PI/180
 	return Vector2(cos(radians), sin(radians))
-			draw_line(position, result["position"] - global_position, Color.ORANGE)
 
+func ViewCastInfo(angle_local: float) -> viewcastInfo:
+	var ray_dir = 	dirFromAngle((-viewAngle / 2) + angle_local, false)
+	var local_dir = dirFromAngle((-viewAngle / 2) + angle_local, true)
+	var physics = get_world_2d().direct_space_state
+	var rayQuery = PhysicsRayQueryParameters2D.create(global_position, global_position + ray_dir * viewRadius, 0b110, [self])
+	var ray_result = physics.intersect_ray(rayQuery)
+	
+	if ray_result.is_empty():
+		return viewcastInfo.new(false, local_dir * viewRadius, viewRadius, angle_local)
+	else:
+		return viewcastInfo.new(true, local_dir * global_position.distance_to(ray_result["position"]), global_position.distance_to(ray_result["position"]), angle_local)
 
-func newViewCastInfo(origin: Vector2, end: Vector2) -> Dictionary:
-	var result:Dictionary = {}
-	result = viewcastInfo_mold.duplicate()
-	return result
 
 #Subclass for RaycastInformation
 class viewcastInfo :
-	var origin: Vector2
-	var end   : Vector2
-	var position: Vector2
+	var hit		: bool
+	var point	: Vector2
+	var dist	: float
+	var angle	: float
 	
+	func _init(_hit:bool, _point:Vector2, _dist: float, _angle: float):
+		hit 	= _hit
+		point 	= _point
+		dist	= _dist
+		angle	= _angle
+
+
+#Archived Raycast Array code for emergency
+#func RaycastAarray():
+	#var rayNumber:int = roundi(viewAngle * raycastResolution)
+	#
+	##Instantiate array of Vector2, the array size will be rayNumber + 2 (for the outer most lines)
+	#var rayArray: Array
+	#var step: float = viewAngle / (rayNumber + 1)
+#
+	#for i in (rayNumber + 2):
+		##print("i is: " + str(i))
+		##print("Current angle: " + str(i * step))
+		#var angle = i * step
+		#var dir  = dirFromAngle((-viewAngle / 2) + angle, false)
+		#var dir_global = dirFromAngle((-viewAngle / 2) + angle, true)
+		#var physics = get_world_2d().direct_space_state
+		#var rayQuery = PhysicsRayQueryParameters2D.create(global_position, global_position + dir * viewRadius, 0b110, [self])
+		#var result = physics.intersect_ray(rayQuery)
+		#if result.is_empty():
+			#draw_line(position, dir_global * viewRadius, Color.HONEYDEW)
+		#else:
+			#draw_line(position, dir_global * global_position.distance_to(result["position"]), Color.ORANGE)

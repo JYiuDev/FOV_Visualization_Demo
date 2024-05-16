@@ -1,10 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://k68dj1602unv"]
+[gd_scene load_steps=6 format=3 uid="uid://k68dj1602unv"]
 
 [ext_resource type="Script" path="res://FOV_Entities/Observer/CharacterMovement.gd" id="1_px71a"]
 [ext_resource type="Texture2D" uid="uid://cbkmghmkq1lxn" path="res://icon.svg" id="1_vhn2i"]
 [ext_resource type="Script" path="res://FOV_Entities/Observer/FOV.gd" id="2_cl2k0"]
 [ext_resource type="Script" path="res://FOV_Entities/Observer/FOVDebug.gd" id="2_j3h7k"]
-[ext_resource type="Script" path="res://FOV_Entities/Observer/FOVMeshArray.gd" id="5_f4nq2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bylnx"]
 radius = 18.15
@@ -27,11 +26,7 @@ shape = SubResource("CircleShape2D_bylnx")
 script = ExtResource("2_cl2k0")
 viewRadius = 250.0
 viewAngle = 90.0
-raycastResolution = 0.1
 
 [node name="FOV_DebugDraw" type="Node2D" parent="FOV" node_paths=PackedStringArray("fow")]
 script = ExtResource("2_j3h7k")
 fow = NodePath("..")
-
-[node name="FOV_MeshArray" type="Node2D" parent="FOV"]
-script = ExtResource("5_f4nq2")

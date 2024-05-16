@@ -3,4 +3,7 @@
 [ext_resource type="Script" path="res://MeshArrayTest.gd" id="1_5bem2"]
 
 [node name="MeshInstanceTest" type="Node2D"]
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2(470, 256)
 script = ExtResource("1_5bem2")
