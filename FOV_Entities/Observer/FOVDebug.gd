@@ -15,8 +15,6 @@ func _draw():
 
 func _process(_delta):
 	queue_redraw()
-	
-	
 
 func drawVisibleTargets():
 	#loop through array

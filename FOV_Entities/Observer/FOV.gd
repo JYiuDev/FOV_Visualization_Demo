@@ -63,7 +63,9 @@ func RaycastAarray():
 	#Instantiate array of Vector2, the array size will be rayNumber + 2 (for the outer most lines)
 	var rayArray: Array
 	var step: float = viewAngle / (rayNumber + 1)
-
+	#Array of vector2 positions(local POV) 
+	var viewPoints: Array = []
+	
 	for i in (rayNumber + 2):
 		#print("i is: " + str(i))
 		#print("Current angle: " + str(i * step))
@@ -73,19 +75,31 @@ func RaycastAarray():
 			draw_line(position, viewcast.point, Color.MEDIUM_VIOLET_RED)
 		else:
 			draw_line(position, viewcast.point, Color.BLACK)
-
-
-
+		viewPoints.append(viewcast.point)
+	
+	#Instantiate array for mesh verticies
+	#Count = all raycasts + centre vertex
+	var vertexCount:int = viewPoints.size() + 1
+	var verticies:Array
+	verticies.resize(vertexCount)
+	verticies[0] = Vector2.ZERO
+	#Number of triangles = verticies count - 2
+	var triangles:Array
+	triangles.resize((vertexCount-2) * 3)
+	#Set triangle vertices for ArrayMesh
+	
+	
 # Takes in angle and spits out local relative vector, UP is 0
 func dirFromAngle(angleInDegree: float, global: bool) -> Vector2:
 	if not global:
 		angleInDegree += global_rotation_degrees
-		
+
 	var radians: float = (angleInDegree) * PI/180
 	return Vector2(cos(radians), sin(radians))
 
+#give angle, return viewcastinfo
 func ViewCastInfo(angle_local: float) -> viewcastInfo:
-	var ray_dir = 	dirFromAngle((-viewAngle / 2) + angle_local, false)
+	var ray_dir   = dirFromAngle((-viewAngle / 2) + angle_local, false)
 	var local_dir = dirFromAngle((-viewAngle / 2) + angle_local, true)
 	var physics = get_world_2d().direct_space_state
 	var rayQuery = PhysicsRayQueryParameters2D.create(global_position, global_position + ray_dir * viewRadius, 0b110, [self])
@@ -95,7 +109,6 @@ func ViewCastInfo(angle_local: float) -> viewcastInfo:
 		return viewcastInfo.new(false, local_dir * viewRadius, viewRadius, angle_local)
 	else:
 		return viewcastInfo.new(true, local_dir * global_position.distance_to(ray_result["position"]), global_position.distance_to(ray_result["position"]), angle_local)
-
 
 #Subclass for RaycastInformation
 class viewcastInfo :
