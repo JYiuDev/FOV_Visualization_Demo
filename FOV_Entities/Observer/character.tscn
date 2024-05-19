@@ -29,6 +29,7 @@ viewAngle = 90.0
 raycastResolution = 0.1
 
 [node name="FOV_DebugDraw" type="Node2D" parent="FOV" node_paths=PackedStringArray("fow")]
+z_index = 1
 script = ExtResource("2_j3h7k")
 fow = NodePath("..")
 

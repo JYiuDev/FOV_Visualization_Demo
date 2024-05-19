@@ -1,6 +1,9 @@
-extends Node2D
+extends FOV
+class_name  FOVDebug
 
 @export var fow: FOV
+var viewcastArray: Array = []
+
 func _ready():
 	pass
 	
@@ -11,6 +14,15 @@ func _draw():
 	
 	draw_line(position, fow.dirFromAngle(-fow.viewAngle/2, true) * fow.viewRadius, Color.BLACK)
 	draw_line(position, fow.dirFromAngle(fow.viewAngle/2 , true) * fow.viewRadius, Color.BLACK)
+	
+	if !viewcastArray.is_empty() :
+		for i in viewcastArray.size():
+			var viewcast = viewcastArray[i] as ViewcastInfo
+			if viewcast.hit:
+				draw_line(position, viewcast.point, Color.DEEP_PINK)
+			else:
+				draw_line(position, viewcast.point, Color.BLACK)
+				
 
 func _process(_delta):
 	queue_redraw()

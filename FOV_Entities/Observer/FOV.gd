@@ -12,7 +12,7 @@ var targetsInRange: 	Array = []
 var targetsInVision:	Array = []
 
 var FOVmesh: MeshInstance2D
-var FOVDraw: Node2D
+var FOVDraw: FOVDebug
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	FOVmesh = get_node("FOV_Mesh")
@@ -64,35 +64,34 @@ func FindTargets(time:float):
 			
 func RaycastAarray():
 	var rayNumber:int = roundi(viewAngle * raycastResolution)
-	
 	#Instantiate array of Vector2, the array size will be rayNumber + 2 (for the outer most lines)
 	var rayArray: Array
 	var step: float = viewAngle / (rayNumber + 1)
+	
 	#Array of vector2 positions(local POV) 
-	var viewPoints: Array = []
+	var viewPoints: PackedVector2Array = []
+	var viewcastArray: Array = []
 	
 	for i in (rayNumber + 2):
-		#print("i is: " + str(i))
-		#print("Current angle: " + str(i * step))
 		var angle = i * step
-		var viewcast:viewcastInfo = ViewCastInfo(angle)
-		if viewcast.hit:
-			draw_line(position, viewcast.point, Color.MEDIUM_VIOLET_RED)
-			FOVDraw.draw_line(position, viewcast.point, Color.MEDIUM_VIOLET_RED)
-		else:
-			draw_line(position, viewcast.point, Color.BLACK)
-			FOVDraw.draw_line(position, viewcast.point, Color.BLACK)
+		var viewcast:ViewcastInfo = Viewcast(angle)
 		viewPoints.append(viewcast.point)
+		viewcastArray.append(viewcast)
+		
+	#Pass viewpoints to debug
+	FOVDraw.viewcastArray.clear()
+	FOVDraw.viewcastArray = viewcastArray
 	
 	#Instantiate array for mesh verticies
 	#Count = all raycasts + centre vertex
-	var verticies:Array
+	var verticies:PackedVector2Array
 	verticies.append(Vector2.ZERO) 
 	verticies.append_array(viewPoints)
 	#Number of triangles = verticies count - 2
 	var triangles:PackedVector2Array
 	triangles.resize((verticies.size() - 2) * 3)
 	
+	#Set array style triangles
 	for i in triangles.size():
 		match i%3:
 			0:
@@ -110,11 +109,6 @@ func RaycastAarray():
 	arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	FOVmesh.mesh = arr_mesh
 	
-	#debug draw
-	for i in viewPoints.size():
-		
-		pass
-	
 	#Set triangle vertices for ArrayMesh
 	
 	
@@ -127,7 +121,7 @@ func dirFromAngle(angleInDegree: float, global: bool) -> Vector2:
 	return Vector2(cos(radians), sin(radians))
 
 #give angle, return viewcastinfo
-func ViewCastInfo(angle_local: float) -> viewcastInfo:
+func Viewcast(angle_local: float) -> ViewcastInfo:
 	var ray_dir   = dirFromAngle((-viewAngle / 2) + angle_local, false)
 	var local_dir = dirFromAngle((-viewAngle / 2) + angle_local, true)
 	var physics = get_world_2d().direct_space_state
@@ -135,12 +129,12 @@ func ViewCastInfo(angle_local: float) -> viewcastInfo:
 	var ray_result = physics.intersect_ray(rayQuery)
 	
 	if ray_result.is_empty():
-		return viewcastInfo.new(false, local_dir * viewRadius, viewRadius, angle_local)
+		return ViewcastInfo.new(false, local_dir * viewRadius, viewRadius, angle_local)
 	else:
-		return viewcastInfo.new(true, local_dir * global_position.distance_to(ray_result["position"]), global_position.distance_to(ray_result["position"]), angle_local)
+		return ViewcastInfo.new(true, local_dir * global_position.distance_to(ray_result["position"]), global_position.distance_to(ray_result["position"]), angle_local)
 
 #Subclass for RaycastInformation
-class viewcastInfo :
+class ViewcastInfo:
 	var hit		: bool
 	var point	: Vector2
 	var dist	: float
@@ -152,6 +146,14 @@ class viewcastInfo :
 		dist	= _dist
 		angle	= _angle
 
+#Subclass for edge information
+class EdgeInfo:
+	var pointA	: Vector2
+	var pointB	: Vector2
+	
+	func _init(_pointA:Vector2, _pointB:Vector2):
+		pointA = _pointA
+		pointB = _pointB
 
 #Archived Raycast Array code for emergency
 #func RaycastAarray():
