@@ -10,8 +10,13 @@ class_name FOV
 
 var targetsInRange: 	Array = []
 var targetsInVision:	Array = []
+
+var FOVmesh: MeshInstance2D
+var FOVDraw: Node2D
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	FOVmesh = get_node("FOV_Mesh")
+	FOVDraw = get_node("FOV_DebugDraw")
 	FindTargets(findTargetFrequency)
 
 
@@ -73,19 +78,43 @@ func RaycastAarray():
 		var viewcast:viewcastInfo = ViewCastInfo(angle)
 		if viewcast.hit:
 			draw_line(position, viewcast.point, Color.MEDIUM_VIOLET_RED)
+			FOVDraw.draw_line(position, viewcast.point, Color.MEDIUM_VIOLET_RED)
 		else:
 			draw_line(position, viewcast.point, Color.BLACK)
+			FOVDraw.draw_line(position, viewcast.point, Color.BLACK)
 		viewPoints.append(viewcast.point)
 	
 	#Instantiate array for mesh verticies
 	#Count = all raycasts + centre vertex
-	var vertexCount:int = viewPoints.size() + 1
 	var verticies:Array
-	verticies.resize(vertexCount)
-	verticies[0] = Vector2.ZERO
+	verticies.append(Vector2.ZERO) 
+	verticies.append_array(viewPoints)
 	#Number of triangles = verticies count - 2
-	var triangles:Array
-	triangles.resize((vertexCount-2) * 3)
+	var triangles:PackedVector2Array
+	triangles.resize((verticies.size() - 2) * 3)
+	
+	for i in triangles.size():
+		match i%3:
+			0:
+				triangles[i] = Vector2.ZERO
+			1:
+				triangles[i] = verticies[i / 3 + 1]
+			2:
+				triangles[i] = verticies[i / 3 + 2]
+	
+	#Create new array mesh, pass to child mesh instance
+	var arr_mesh = ArrayMesh.new()
+	var arrays = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = triangles
+	arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	FOVmesh.mesh = arr_mesh
+	
+	#debug draw
+	for i in viewPoints.size():
+		
+		pass
+	
 	#Set triangle vertices for ArrayMesh
 	
 	

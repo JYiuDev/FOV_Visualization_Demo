@@ -10,8 +10,12 @@
 position = Vector2(123, 88)
 
 [node name="FOV" parent="Character" index="2"]
+viewRadius = 500.0
 findTargetFrequency = 0.1
 raycastResolution = 0.305
+
+[node name="FOV_DebugDraw" parent="Character/FOV" index="0"]
+z_index = 3
 
 [node name="Target" parent="." instance=ExtResource("2_us1wp")]
 position = Vector2(114, 253)
