@@ -8,7 +8,7 @@ class_name FOV
 @export_range(0.01, 1) var findTargetFrequency: float = 0.5
 @export_range(0.01, 1) var raycastResolution: float   = 0.01
 
-@export_range(0,20) var findEdgeRepetition: int = 6
+@export_range(0,20) var edgeFindIteration: int = 6
 
 var targetsInRange: 	Array = []
 var targetsInVision:	Array = []
@@ -73,12 +73,24 @@ func RaycastAarray():
 	#Array of vector2 positions(local POV) 
 	var viewPoints: PackedVector2Array = []
 	var viewcastArray: Array = []
+	var oldViewCast: ViewcastInfo
 	
 	for i in (rayNumber + 2):
 		var angle = i * step
 		var viewcast:ViewcastInfo = Viewcast(angle)
+		
+		if i > 0:
+			if(oldViewCast.hit != viewcast.hit):
+				var edge: EdgeInfo = FindEdge(oldViewCast, viewcast)
+				if edge.pointA != Vector2.ZERO:
+					viewPoints.append(edge.pointA)
+				if edge.pointB != Vector2.ZERO:
+					viewPoints.append(edge.pointB)
+					
 		viewPoints.append(viewcast.point)
 		viewcastArray.append(viewcast)
+		oldViewCast = viewcast
+		
 		
 	#Pass viewpoints to debug
 	FOVDraw.viewcastArray.clear()
@@ -114,12 +126,28 @@ func RaycastAarray():
 	#Set triangle vertices for ArrayMesh
 	
 
-func FindEdge(minViewcast: ViewcastInfo, maxViewcast:ViewcastInfo):
-	var minAngle
-	var maxAngle
-	var minPoint
-	var maxPoin
-	pass
+func FindEdge(minViewcast: ViewcastInfo, maxViewcast:ViewcastInfo) -> EdgeInfo:
+	var minAngle = minViewcast.angle
+	var maxAngle = maxViewcast.angle
+	var minPoint = Vector2.ZERO
+	var maxPoint = Vector2.ZERO
+	
+	#Iterate find edge algorithm 
+	for i in edgeFindIteration:
+		var angle	 	= (minAngle+maxAngle)/2.0
+		var newViewCast = Viewcast(angle)
+		#re-adjust min/max angle for next iteration
+		if (newViewCast.hit == minViewcast.hit):
+			minAngle = angle
+			minPoint = newViewCast.point
+		else:
+			maxAngle = angle
+			maxPoint = newViewCast.point
+	#output minpoint and max point
+	return EdgeInfo.new(minPoint, maxPoint)
+	
+	
+	
 
 # Takes in angle and spits out local relative vector, UP is 0
 func dirFromAngle(angleInDegree: float, global: bool) -> Vector2:
