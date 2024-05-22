@@ -8,6 +8,8 @@ class_name FOV
 @export_range(0.01, 1) var findTargetFrequency: float = 0.5
 @export_range(0.01, 1) var raycastResolution: float   = 0.01
 
+@export_range(0,20) var findEdgeRepetition: int = 6
+
 var targetsInRange: 	Array = []
 var targetsInVision:	Array = []
 
@@ -111,7 +113,14 @@ func RaycastAarray():
 	
 	#Set triangle vertices for ArrayMesh
 	
-	
+
+func FindEdge(minViewcast: ViewcastInfo, maxViewcast:ViewcastInfo):
+	var minAngle
+	var maxAngle
+	var minPoint
+	var maxPoin
+	pass
+
 # Takes in angle and spits out local relative vector, UP is 0
 func dirFromAngle(angleInDegree: float, global: bool) -> Vector2:
 	if not global:

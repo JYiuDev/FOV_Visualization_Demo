@@ -36,7 +36,6 @@ func drawRayAarray():
 	var rayNumber:int = roundi(fow.viewAngle * fow.raycastResolution)
 	
 	#Instantiate array of Vector2, the array size will be rayNumber + 2 (for the outer most lines)
-	var rayArray: Array
 	var step: float = fow.viewAngle / (rayNumber + 1)
 	
 	for i in (rayNumber + 2):
