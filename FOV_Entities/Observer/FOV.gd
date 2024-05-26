@@ -151,9 +151,6 @@ func FindEdge(minViewcast: ViewcastInfo, maxViewcast:ViewcastInfo) -> EdgeInfo:
 			maxPoint = newViewCast.point
 	#output minpoint and max point
 	return EdgeInfo.new(minPoint, maxPoint)
-	
-	
-	
 
 # Takes in angle and spits out local relative vector, UP is 0
 func dirFromAngle(angleInDegree: float, global: bool) -> Vector2:
@@ -201,7 +198,6 @@ class EdgeInfo:
 #Archived Raycast Array code for emergency
 #func RaycastAarray():
 	#var rayNumber:int = roundi(viewAngle * raycastResolution)
-	#
 	##Instantiate array of Vector2, the array size will be rayNumber + 2 (for the outer most lines)
 	#var rayArray: Array
 	#var step: float = viewAngle / (rayNumber + 1)
