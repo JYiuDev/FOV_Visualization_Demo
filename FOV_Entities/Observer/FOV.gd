@@ -15,6 +15,9 @@ var targetsInVision:	Array = []
 
 var FOVmesh: MeshInstance2D
 var FOVDraw: FOVDebug
+
+@export_range(0, 50) var edgeThreshhold: float
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	FOVmesh = get_node("FOV_Mesh")
@@ -80,7 +83,8 @@ func RaycastAarray():
 		var viewcast:ViewcastInfo = Viewcast(angle)
 		
 		if i > 0:
-			if(oldViewCast.hit != viewcast.hit):
+			var distance: float = abs(viewcast.dist - oldViewCast.dist)
+			if((oldViewCast.hit != viewcast.hit) or (oldViewCast.hit and viewcast.hit and distance > edgeThreshhold)):
 				var edge: EdgeInfo = FindEdge(oldViewCast, viewcast)
 				if edge.pointA != Vector2.ZERO:
 					viewPoints.append(edge.pointA)
@@ -136,8 +140,10 @@ func FindEdge(minViewcast: ViewcastInfo, maxViewcast:ViewcastInfo) -> EdgeInfo:
 	for i in edgeFindIteration:
 		var angle	 	= (minAngle+maxAngle)/2.0
 		var newViewCast = Viewcast(angle)
+		var dist		= abs(newViewCast.dist - minViewcast.dist)
+		var exceedThreshold:bool	= dist > edgeThreshhold
 		#re-adjust min/max angle for next iteration
-		if (newViewCast.hit == minViewcast.hit):
+		if (newViewCast.hit == minViewcast.hit and !exceedThreshold):
 			minAngle = angle
 			minPoint = newViewCast.point
 		else:

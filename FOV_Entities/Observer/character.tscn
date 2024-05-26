@@ -26,7 +26,6 @@ shape = SubResource("CircleShape2D_bylnx")
 script = ExtResource("2_cl2k0")
 viewRadius = 250.0
 viewAngle = 90.0
-raycastResolution = 0.1
 
 [node name="FOV_DebugDraw" type="Node2D" parent="FOV" node_paths=PackedStringArray("fow")]
 z_index = 1

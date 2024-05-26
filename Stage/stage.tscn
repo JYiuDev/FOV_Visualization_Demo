@@ -11,8 +11,9 @@ position = Vector2(123, 88)
 
 [node name="FOV" parent="Character" index="2"]
 viewRadius = 500.0
-findTargetFrequency = 0.1
-raycastResolution = 0.305
+raycastResolution = 0.211
+edgeFindIteration = 10
+edgeThreshhold = 2.0
 
 [node name="FOV_DebugDraw" parent="Character/FOV" index="0"]
 z_index = 3
