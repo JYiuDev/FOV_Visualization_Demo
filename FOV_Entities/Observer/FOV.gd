@@ -2,10 +2,12 @@ extends Node2D
 class_name FOV
 
 @export_category("FOV properties")
+@export var ringRadius: float
 @export var viewRadius: float 
 @export var viewAngle:  float
 
 @export_range(0.01, 1) var findTargetFrequency: float = 0.5
+@export_range(0.01,0.5)var ringResolution:	float = 0.25
 @export_range(0.01, 1) var raycastResolution: float   = 0.01
 
 @export_range(0,20) var edgeFindIteration: int = 6
@@ -23,8 +25,6 @@ func _ready():
 	FOVmesh = get_node("FOV_Mesh")
 	FOVDraw = get_node("FOV_DebugDraw")
 	FindTargets(findTargetFrequency)
-
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	queue_redraw()
@@ -78,6 +78,7 @@ func RaycastAarray():
 	var viewcastArray: Array = []
 	var oldViewCast: ViewcastInfo
 	
+	
 	for i in (rayNumber + 2):
 		var angle = i * step
 		var viewcast:ViewcastInfo = Viewcast(angle)
@@ -94,7 +95,6 @@ func RaycastAarray():
 		viewPoints.append(viewcast.point)
 		viewcastArray.append(viewcast)
 		oldViewCast = viewcast
-		
 		
 	#Pass viewpoints to debug
 	FOVDraw.viewcastArray.clear()
