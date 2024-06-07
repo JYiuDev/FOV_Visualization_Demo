@@ -66,7 +66,72 @@ func FindTargets(time:float):
 	#print(targetsInRange)
 	await get_tree().create_timer(time).timeout
 	FindTargets(time)
-			
+	
+	
+func new_RaycastArray(min_angle_local: float, total_angle: float, ray_length: float, ray_resolution: float) -> Array:
+	var triangleArray: Array
+	var rayNumber:int = roundi(total_angle * ray_resolution)
+	#Instantiate array of Vector2, the array size will be rayNumber + 2 (for the outer most lines)
+	var rayArray: Array
+	var step: float = total_angle / (rayNumber + 1)
+	
+	#Array of vector2 positions(local POV) 
+	var viewPoints: PackedVector2Array = []
+	var viewcastArray: Array = []
+	var oldViewCast: ViewcastInfo
+	
+	for i in (rayNumber + 2):
+		var angle = min_angle_local + (i * step)
+		#Viewcast returns info of:	- Hit or not (bool)
+		#							- point of contact (vec2)
+		#							- distance to point (float)
+		#							- local angle (float)
+		var viewcast:ViewcastInfo = Viewcast(angle, ray_length)
+		if i > 0:
+			var distance: float = abs(viewcast.dist - oldViewCast.dist)
+			if((oldViewCast.hit != viewcast.hit) or (oldViewCast.hit and viewcast.hit and distance > edgeThreshhold)):
+				var edge: EdgeInfo = FindEdge(oldViewCast, viewcast)
+				if edge.pointA != Vector2.ZERO:
+					viewPoints.append(edge.pointA)
+				if edge.pointB != Vector2.ZERO:
+					viewPoints.append(edge.pointB)
+					
+		viewPoints.append(viewcast.point)
+		viewcastArray.append(viewcast)
+		oldViewCast = viewcast
+		
+	#Pass viewpoints to debug
+	FOVDraw.viewcastArray.clear()
+	FOVDraw.viewcastArray = viewcastArray
+	
+	#Instantiate array for mesh verticies
+	#Count = all raycasts + centre vertex
+	var verticies:PackedVector2Array
+	verticies.append(Vector2.ZERO) 
+	verticies.append_array(viewPoints)
+	#Number of triangles = verticies count - 2
+	var triangles:PackedVector2Array
+	triangles.resize((verticies.size() - 2) * 3)
+	
+	##Set array style triangles
+	#for i in triangles.size():
+		#match i%3:
+			#0:
+				#triangles[i] = Vector2.ZERO
+			#1:
+				#triangles[i] = verticies[i / 3 + 1]
+			#2:
+				#triangles[i] = verticies[i / 3 + 2]
+	#
+	##Create new array mesh, pass to child mesh instance
+	#var arr_mesh = ArrayMesh.new()
+	#var arrays = []
+	#arrays.resize(Mesh.ARRAY_MAX)
+	#arrays[Mesh.ARRAY_VERTEX] = triangles
+	#arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	#FOVmesh.mesh = arr_mesh
+	return triangleArray
+	
 func RaycastAarray():
 	var rayNumber:int = roundi(viewAngle * raycastResolution)
 	#Instantiate array of Vector2, the array size will be rayNumber + 2 (for the outer most lines)
@@ -161,10 +226,11 @@ func dirFromAngle(angleInDegree: float, global: bool) -> Vector2:
 	return Vector2(cos(radians), sin(radians))
 
 #give angle, return viewcastinfo
-func Viewcast(angle_local: float) -> ViewcastInfo:
+func Viewcast(angle_local: float, ray_length: float) -> ViewcastInfo:
 	var ray_dir   = dirFromAngle((-viewAngle / 2) + angle_local, false)
 	var local_dir = dirFromAngle((-viewAngle / 2) + angle_local, true)
 	var physics = get_world_2d().direct_space_state
+	#physics raycast requires global coordinations
 	var rayQuery = PhysicsRayQueryParameters2D.create(global_position, global_position + ray_dir * viewRadius, 0b110, [self])
 	var ray_result = physics.intersect_ray(rayQuery)
 	
