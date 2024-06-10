@@ -1,5 +1,4 @@
 extends Node2D
-class_name FOV
 
 @export_category("FOV properties")
 @export var ringRadius: float

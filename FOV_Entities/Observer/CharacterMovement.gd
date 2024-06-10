@@ -13,7 +13,7 @@ func _process(_delta):
 	faceMouse()
 	
 	
-func _physics_process(delta):
+func _physics_process(_delta):
 	var input_direction = Input.get_vector("Left", "Right", "Up", "Down")
 	velocity = input_direction * moveSpeed
 	move_and_slide()
