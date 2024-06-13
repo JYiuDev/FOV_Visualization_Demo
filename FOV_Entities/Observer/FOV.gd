@@ -15,7 +15,6 @@ class_name FOV
 var targetsInRange: 	Array = []
 var targetsInVision:	Array = []
 
-
 var FOVmesh: MeshInstance2D
 var FOVDraw: FOVDebug
 

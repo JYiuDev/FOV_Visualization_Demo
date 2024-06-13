@@ -1,28 +1,32 @@
-[gd_scene load_steps=4 format=3 uid="uid://coudtlyh73adb"]
+[gd_scene load_steps=5 format=3 uid="uid://coudtlyh73adb"]
 
 [ext_resource type="PackedScene" uid="uid://k68dj1602unv" path="res://FOV_Entities/Observer/character.tscn" id="1_ja7ih"]
 [ext_resource type="PackedScene" uid="uid://dufm7hl1icvwg" path="res://FOV_Entities/Targets/target.tscn" id="2_us1wp"]
 [ext_resource type="PackedScene" uid="uid://b8l5anamht3f4" path="res://FOV_Entities/Obstacles/Obstacle.tscn" id="3_yqo61"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_o3epp"]
 
 [node name="Stage" type="Node2D"]
 
 [node name="Character" parent="." instance=ExtResource("1_ja7ih")]
 position = Vector2(123, 88)
 
-[node name="Sprite2D" parent="Character" index="0"]
+[node name="CameraCull" type="Camera2D" parent="Character"]
+scale = Vector2(1.00016, 1.00016)
+
+[node name="Sprite2D" parent="Character" index="1"]
 z_index = 10
 
-[node name="FOV" parent="Character" index="2"]
+[node name="FOV" parent="Character" index="3"]
 ringRadius = 60.0
 viewRadius = 350.0
 ringResolution = 0.1
 raycastResolution = 0.6
 edgeThreshhold = 15.0
 
-[node name="FOV_DebugDraw" parent="Character/FOV" index="0"]
+[node name="FOV_DebugDraw" parent="Character/FOV" index="0" node_paths=PackedStringArray("fow")]
 z_index = 3
-fow = Object(Node2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(0, 0),"rotation":0.0,"scale":Vector2(1, 1),"skew":0.0,"script":Resource("res://FOV_Entities/Observer/FOV.gd"),"ringRadius":60.0,"viewRadius":350.0,"viewAngle":90.0,"findTargetFrequency":0.5,"ringResolution":0.1,"raycastResolution":0.6,"edgeFindIteration":6,"edgeThreshhold":15.0)
-
+fow = NodePath("..")
 
 [node name="Target" parent="." instance=ExtResource("2_us1wp")]
 position = Vector2(114, 253)
@@ -37,5 +41,8 @@ position = Vector2(411, 284)
 position = Vector2(289, 167)
 scale = Vector2(4.99984, 0.999845)
 disable_mode = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("ViewportTexture_o3epp")
 
 [editable path="Character"]
