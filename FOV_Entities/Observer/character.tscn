@@ -26,6 +26,9 @@ shape = SubResource("CircleShape2D_bylnx")
 script = ExtResource("2_cl2k0")
 viewRadius = 250.0
 viewAngle = 90.0
+maxViewAngle = 90.0
+minViewAngle = 20.0
+viewAngleTransitionTime = 1.0
 
 [node name="FOV_DebugDraw" type="Node2D" parent="FOV"]
 z_index = 1

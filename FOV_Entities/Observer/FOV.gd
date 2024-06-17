@@ -6,6 +6,12 @@ class_name FOV
 @export var viewRadius: float 
 @export var viewAngle:  float
 
+#view angle transition
+@export var maxViewAngle: float
+@export var minViewAngle: float
+@export var viewAngleTransitionTime: float
+var isbrolooking: bool = true
+
 @export_range(0.01, 1) var findTargetFrequency: float = 0.5
 @export_range(0.01,0.5)var ringResolution:	float = 0.25
 @export_range(0.01, 1) var raycastResolution: float   = 0.01
@@ -189,6 +195,13 @@ func Viewcast(angle_local: float, ray_length: float) -> ViewcastInfo:
 		return ViewcastInfo.new(false, local_dir * ray_length, ray_length, angle_local)
 	else:
 		return ViewcastInfo.new(true, local_dir * global_position.distance_to(ray_result["position"]), global_position.distance_to(ray_result["position"]), angle_local)
+
+#Change viewAngle when called
+func changeView():
+	if(isbrolooking):
+		pass
+	else:
+		pass
 
 #Subclass for RaycastInformation
 class ViewcastInfo:

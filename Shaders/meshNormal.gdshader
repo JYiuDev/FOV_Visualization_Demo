@@ -8,7 +8,7 @@ void fragment() {
 	vec4 current_color = texture(TEXTURE,UV);
 	if(current_color != fov_mesh_color)
 	{
-		current_color.a = 0.0;
+		COLOR = non_mesh_color;
 	}
 }
 

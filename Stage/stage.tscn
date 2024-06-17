@@ -1,9 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://coudtlyh73adb"]
+[gd_scene load_steps=10 format=3 uid="uid://coudtlyh73adb"]
 
 [ext_resource type="PackedScene" uid="uid://k68dj1602unv" path="res://FOV_Entities/Observer/character.tscn" id="1_ja7ih"]
 [ext_resource type="PackedScene" uid="uid://dufm7hl1icvwg" path="res://FOV_Entities/Targets/target.tscn" id="2_us1wp"]
 [ext_resource type="PackedScene" uid="uid://b8l5anamht3f4" path="res://FOV_Entities/Obstacles/Obstacle.tscn" id="3_yqo61"]
-[ext_resource type="Shader" path="res://Stage/meshNormal.gdshader" id="4_u2yar"]
+[ext_resource type="Shader" path="res://Shaders/meshNormal.gdshader" id="4_u2yar"]
 [ext_resource type="Texture2D" uid="uid://cbkmghmkq1lxn" path="res://icon.svg" id="4_wmcx6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v7p6t"]
@@ -13,6 +13,15 @@ shader_parameter/fov_mesh_color = Color(1, 1, 1, 1)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_cue7j"]
 viewport_path = NodePath("SubViewportContainer/SubViewport")
+
+[sub_resource type="Gradient" id="Gradient_rccg1"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2o6tj"]
+gradient = SubResource("Gradient_rccg1")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
 
 [node name="Stage" type="Node2D"]
 
@@ -26,7 +35,7 @@ z_index = 10
 ringRadius = 60.0
 viewRadius = 350.0
 ringResolution = 0.1
-raycastResolution = 0.6
+raycastResolution = 0.75
 edgeThreshhold = 15.0
 vpMesh = NodePath("../../SubViewportContainer/SubViewport/PlayerFollower/NormalMesh")
 
@@ -84,8 +93,16 @@ texture = ExtResource("4_wmcx6")
 
 [node name="NormalMap" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_v7p6t")
-position = Vector2(685, 147)
-scale = Vector2(0.3, 0.3)
+position = Vector2(600, 109)
+scale = Vector2(0.2, 0.2)
 texture = SubResource("ViewportTexture_cue7j")
 
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(287, 84)
+color = Color(0.870588, 0.266667, 0.552941, 1)
+energy = 4.2
+texture = SubResource("GradientTexture2D_2o6tj")
+texture_scale = 1.48
+
 [editable path="Character"]
+[editable path="Target"]
