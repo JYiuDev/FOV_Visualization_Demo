@@ -20,6 +20,8 @@ var FOVDraw: FOVDebug
 
 @export_range(0, 50) var edgeThreshhold: float
 
+@export var vpMesh: MeshInstance2D
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	FOVmesh = get_node("FOV_Mesh")
@@ -141,6 +143,8 @@ func new_view_mesh(viewPoints: PackedVector2Array):
 	arrays[Mesh.ARRAY_VERTEX] = triangles
 	arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	FOVmesh.mesh = arr_mesh
+	if vpMesh:
+		vpMesh.mesh = arr_mesh
 
 func FindEdge(minViewcast: ViewcastInfo, maxViewcast:ViewcastInfo, ray_length: float) -> EdgeInfo:
 	var minAngle = minViewcast.angle
