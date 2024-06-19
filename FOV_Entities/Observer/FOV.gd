@@ -11,6 +11,9 @@ class_name FOV
 @export var minViewAngle: float
 @export var viewAngleTransitionTime: float
 var isbrolooking: bool = true
+var viewWeight: float
+enum viewState{EXPAND, REDUCE}
+var curr_viewState = viewState.EXPAND
 
 @export_range(0.01, 1) var findTargetFrequency: float = 0.5
 @export_range(0.01,0.5)var ringResolution:	float = 0.25
@@ -33,9 +36,16 @@ func _ready():
 	FOVmesh = get_node("FOV_Mesh")
 	FOVDraw = get_node("FOV_DebugDraw")
 	FindTargets(findTargetFrequency)
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
+func _process(delta):
 	queue_redraw()
+	
+	match curr_viewState:
+		viewState.EXPAND:
+			pass
+		
+	
 	
 func _draw():
 	#Draw red line to enemy in sight
@@ -62,6 +72,8 @@ func _draw():
 	FOVDraw.viewcastArray.append_array(lower_ring["viewcastArray"])
 	new_view_mesh(mesh_verticies)
 
+
+
 func FindTargets(time:float):
 	var physics = get_world_2d().direct_space_state
 	var shapCastQuery:PhysicsShapeQueryParameters2D = PhysicsShapeQueryParameters2D.new()
@@ -87,7 +99,6 @@ func FindTargets(time:float):
 	#print(targetsInRange)
 	await get_tree().create_timer(time).timeout
 	FindTargets(time)
-	
 	
 func new_RaycastArray(min_angle_local: float, total_angle: float, ray_length: float, ray_resolution: float) -> Dictionary:
 	var rayNumber:int = roundi(total_angle * ray_resolution)
@@ -195,14 +206,7 @@ func Viewcast(angle_local: float, ray_length: float) -> ViewcastInfo:
 		return ViewcastInfo.new(false, local_dir * ray_length, ray_length, angle_local)
 	else:
 		return ViewcastInfo.new(true, local_dir * global_position.distance_to(ray_result["position"]), global_position.distance_to(ray_result["position"]), angle_local)
-
-#Change viewAngle when called
-func changeView():
-	if(isbrolooking):
-		pass
-	else:
-		pass
-
+	
 #Subclass for RaycastInformation
 class ViewcastInfo:
 	var hit		: bool
