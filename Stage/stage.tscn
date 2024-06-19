@@ -34,6 +34,7 @@ z_index = 10
 [node name="FOV" parent="Character" index="2" node_paths=PackedStringArray("vpMesh")]
 ringRadius = 60.0
 viewRadius = 350.0
+viewTransitionTime = 5.0
 ringResolution = 0.1
 raycastResolution = 0.75
 edgeThreshhold = 15.0

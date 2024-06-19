@@ -9,9 +9,8 @@ class_name FOV
 #view angle transition
 @export var maxViewAngle: float
 @export var minViewAngle: float
-@export var viewAngleTransitionTime: float
-var isbrolooking: bool = true
-var viewWeight: float
+@export var viewTransitionTime: float
+var viewWeight: float = 1.0
 enum viewState{EXPAND, REDUCE}
 var curr_viewState = viewState.EXPAND
 
@@ -43,9 +42,18 @@ func _process(delta):
 	
 	match curr_viewState:
 		viewState.EXPAND:
-			pass
+			if(viewAngle < maxViewAngle):
+				viewWeight = clampf(viewWeight + (delta/viewTransitionTime), 0.0, 1.0)
+				viewAngle  = lerpf(minViewAngle, maxViewAngle, viewWeight)
+			else:
+				viewAngle = maxViewAngle
 		
-	
+		viewState.REDUCE:
+			if(viewAngle > minViewAngle):
+				viewWeight = clampf(viewWeight - (delta/viewTransitionTime), 0.0, 1.0)
+				viewAngle  = lerpf(minViewAngle, maxViewAngle, viewWeight)
+			else:
+				viewAngle = minViewAngle
 	
 func _draw():
 	#Draw red line to enemy in sight
@@ -206,7 +214,16 @@ func Viewcast(angle_local: float, ray_length: float) -> ViewcastInfo:
 		return ViewcastInfo.new(false, local_dir * ray_length, ray_length, angle_local)
 	else:
 		return ViewcastInfo.new(true, local_dir * global_position.distance_to(ray_result["position"]), global_position.distance_to(ray_result["position"]), angle_local)
-	
+
+func SwitchViewState():
+	match  curr_viewState:
+		viewState.EXPAND:
+			curr_viewState = viewState.REDUCE
+		
+		viewState.REDUCE:
+			curr_viewState = viewState.EXPAND
+		
+
 #Subclass for RaycastInformation
 class ViewcastInfo:
 	var hit		: bool
