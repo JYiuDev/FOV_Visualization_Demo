@@ -9,9 +9,10 @@ void fragment() {
 	if(current_color != fov_mesh_color)
 	{
 		COLOR = non_mesh_color;
-	} else{
-		COLOR.a = 0.0;
-	}
+	} 
+	//else{
+		//COLOR.a = 0.0;
+	//}
 }
 
 //void light() {
