@@ -1,124 +1,119 @@
-[gd_scene load_steps=13 format=3 uid="uid://coudtlyh73adb"]
+[gd_scene load_steps=10 format=3 uid="uid://coudtlyh73adb"]
 
-[ext_resource type="PackedScene" uid="uid://k68dj1602unv" path="res://FOV_Entities/Observer/character.tscn" id="1_ja7ih"]
-[ext_resource type="PackedScene" uid="uid://dufm7hl1icvwg" path="res://FOV_Entities/Targets/target.tscn" id="2_us1wp"]
-[ext_resource type="Shader" path="res://Shaders/FOV_Cull.gdshader" id="3_vyv6n"]
-[ext_resource type="PackedScene" uid="uid://b8l5anamht3f4" path="res://FOV_Entities/Obstacles/Obstacle.tscn" id="3_yqo61"]
+[ext_resource type="Shader" path="res://Shaders/FOV_Cull.gdshader" id="1_duk0p"]
+[ext_resource type="PackedScene" uid="uid://k68dj1602unv" path="res://FOV_Entities/Observer/character.tscn" id="2_f2xj8"]
+[ext_resource type="PackedScene" uid="uid://dufm7hl1icvwg" path="res://FOV_Entities/Targets/target.tscn" id="3_dljjt"]
+[ext_resource type="PackedScene" uid="uid://b8l5anamht3f4" path="res://FOV_Entities/Obstacles/Obstacle.tscn" id="4_irpvh"]
 [ext_resource type="Shader" path="res://Shaders/meshNormal.gdshader" id="4_u2yar"]
 [ext_resource type="Texture2D" uid="uid://cbkmghmkq1lxn" path="res://icon.svg" id="4_wmcx6"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_v7p6t"]
-shader = ExtResource("4_u2yar")
-shader_parameter/non_mesh_color = null
-shader_parameter/fov_mesh_color = Color(1, 1, 1, 1)
+[sub_resource type="ViewportTexture" id="ViewportTexture_rku2g"]
+viewport_path = NodePath("NormalMapVP")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_cue7j"]
-viewport_path = NodePath("SubViewportContainer/SubViewport")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_17icp"]
-shader = ExtResource("3_vyv6n")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y7pwp"]
+resource_local_to_scene = true
+shader = ExtResource("1_duk0p")
+shader_parameter/mask_texture = SubResource("ViewportTexture_rku2g")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_npp71"]
 shader = ExtResource("4_u2yar")
 shader_parameter/non_mesh_color = null
 shader_parameter/fov_mesh_color = Color(1, 1, 1, 1)
 
-[sub_resource type="Gradient" id="Gradient_rccg1"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_2o6tj"]
-gradient = SubResource("Gradient_rccg1")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 1)
-
 [node name="Stage" type="Node2D"]
 
-[node name="PhysicalWorld" type="Node2D" parent="."]
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1600.0
+offset_bottom = 900.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.368627, 0.596078, 0.905882, 0.235294)
 
-[node name="NormalMap" type="Sprite2D" parent="PhysicalWorld"]
-z_index = 1
-material = SubResource("ShaderMaterial_v7p6t")
-position = Vector2(108, 65)
-scale = Vector2(0.04, 0.04)
-texture = SubResource("ViewportTexture_cue7j")
+[node name="PlayerWContainer" type="SubViewportContainer" parent="."]
+material = SubResource("ShaderMaterial_y7pwp")
+offset_right = 1600.0
+offset_bottom = 900.0
 
-[node name="Character" parent="PhysicalWorld" instance=ExtResource("1_ja7ih")]
+[node name="PlayerVP" type="SubViewport" parent="PlayerWContainer"]
+handle_input_locally = false
+size = Vector2i(1600, 900)
+render_target_update_mode = 4
+
+[node name="PhysicalWorld" type="Node2D" parent="PlayerWContainer/PlayerVP"]
+
+[node name="Character" parent="PlayerWContainer/PlayerVP/PhysicalWorld" instance=ExtResource("2_f2xj8")]
 scale = Vector2(1, 1)
 
-[node name="Sprite2D" parent="PhysicalWorld/Character" index="0"]
+[node name="Sprite2D" parent="PlayerWContainer/PlayerVP/PhysicalWorld/Character" index="0"]
 z_index = 10
 
-[node name="FOV" parent="PhysicalWorld/Character" index="2" node_paths=PackedStringArray("vpMesh")]
+[node name="FOV" parent="PlayerWContainer/PlayerVP/PhysicalWorld/Character" index="2" node_paths=PackedStringArray("vpMesh")]
 ringRadius = 60.0
 viewRadius = 350.0
 viewTransitionTime = 0.5
 ringResolution = 0.1
 raycastResolution = 0.75
 edgeThreshhold = 15.0
-vpMesh = NodePath("../../../SubViewportContainer/SubViewport/PlayerFollower/NormalMesh")
+vpMesh = NodePath("../../../../../NormalMapVP/PlayerFollower/NormalMesh")
 
-[node name="FOV_DebugDraw" parent="PhysicalWorld/Character/FOV" index="0" node_paths=PackedStringArray("fow")]
+[node name="FOV_DebugDraw" parent="PlayerWContainer/PlayerVP/PhysicalWorld/Character/FOV" index="0" node_paths=PackedStringArray("fow")]
 z_index = 3
 fow = NodePath("..")
 
-[node name="CameraCull" type="Camera2D" parent="PhysicalWorld/Character"]
-material = SubResource("ShaderMaterial_17icp")
-use_parent_material = true
-scale = Vector2(1.00016, 1.00016)
+[node name="Camera2D" type="Camera2D" parent="PlayerWContainer/PlayerVP/PhysicalWorld/Character"]
 
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="PhysicalWorld/Character"]
-remote_path = NodePath("../../../SubViewportContainer/SubViewport/PlayerFollower")
+[node name="NormalmapRemote" type="RemoteTransform2D" parent="PlayerWContainer/PlayerVP/PhysicalWorld/Character"]
+remote_path = NodePath("../../../../../NormalMapVP/PlayerFollower")
+update_position = false
+update_scale = false
 
-[node name="Target" parent="PhysicalWorld" instance=ExtResource("2_us1wp")]
+[node name="Target" parent="PlayerWContainer/PlayerVP/PhysicalWorld" instance=ExtResource("3_dljjt")]
 position = Vector2(114, 253)
 
-[node name="Target2" parent="PhysicalWorld" instance=ExtResource("2_us1wp")]
+[node name="Target2" parent="PlayerWContainer/PlayerVP/PhysicalWorld" instance=ExtResource("3_dljjt")]
 position = Vector2(285, 113)
 
-[node name="Target3" parent="PhysicalWorld" instance=ExtResource("2_us1wp")]
+[node name="Target3" parent="PlayerWContainer/PlayerVP/PhysicalWorld" instance=ExtResource("3_dljjt")]
 position = Vector2(411, 284)
 
-[node name="Obtacle" parent="PhysicalWorld" instance=ExtResource("3_yqo61")]
+[node name="Obtacle" parent="PlayerWContainer/PlayerVP/PhysicalWorld" instance=ExtResource("4_irpvh")]
 position = Vector2(289, 167)
 scale = Vector2(4.99984, 0.999845)
 disable_mode = 0
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
-offset_left = -1746.0
-offset_top = -453.0
-offset_right = -146.0
-offset_bottom = 447.0
-stretch = true
-
-[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+[node name="NormalMapVP" type="SubViewport" parent="."]
 handle_input_locally = false
 size = Vector2i(1600, 900)
 render_target_update_mode = 4
 
-[node name="CanvasModulate" type="CanvasModulate" parent="SubViewportContainer/SubViewport"]
+[node name="ColorRect" type="ColorRect" parent="NormalMapVP"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -800.0
+offset_top = -450.0
+offset_right = 800.0
+offset_bottom = 450.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
 
-[node name="PlayerFollower" type="Node2D" parent="SubViewportContainer/SubViewport"]
+[node name="PlayerFollower" type="Node2D" parent="NormalMapVP"]
 
-[node name="SubviewCamera" type="Camera2D" parent="SubViewportContainer/SubViewport/PlayerFollower"]
+[node name="SubviewCamera" type="Camera2D" parent="NormalMapVP/PlayerFollower"]
 material = SubResource("ShaderMaterial_npp71")
 
-[node name="Sprite2D" type="Sprite2D" parent="SubViewportContainer/SubViewport/PlayerFollower"]
+[node name="Sprite2D" type="Sprite2D" parent="NormalMapVP/PlayerFollower"]
 visible = false
 z_index = 10
 rotation = 1.5708
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("4_wmcx6")
 
-[node name="NormalMesh" type="MeshInstance2D" parent="SubViewportContainer/SubViewport/PlayerFollower"]
+[node name="NormalMesh" type="MeshInstance2D" parent="NormalMapVP/PlayerFollower"]
 
-[node name="PointLight2D" type="PointLight2D" parent="."]
-visible = false
-position = Vector2(287, 84)
-color = Color(0.870588, 0.266667, 0.552941, 1)
-energy = 4.2
-texture = SubResource("GradientTexture2D_2o6tj")
-texture_scale = 1.48
-
-[editable path="PhysicalWorld/Character"]
-[editable path="PhysicalWorld/Target"]
+[editable path="PlayerWContainer/PlayerVP/PhysicalWorld/Character"]
+[editable path="PlayerWContainer/PlayerVP/PhysicalWorld/Target"]

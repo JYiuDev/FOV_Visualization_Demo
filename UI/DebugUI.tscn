@@ -1,0 +1,116 @@
+[gd_scene load_steps=2 format=3 uid="uid://6tir0vab6otn"]
+
+[ext_resource type="Script" path="res://UI/DebugUI.gd" id="1_88b52"]
+
+[node name="DebugUi" type="CanvasLayer"]
+script = ExtResource("1_88b52")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="DebugHUD" type="VBoxContainer" parent="Control/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Draw" type="HBoxContainer" parent="Control/MarginContainer/DebugHUD"]
+layout_mode = 2
+
+[node name="Des" type="Label" parent="Control/MarginContainer/DebugHUD/Draw"]
+layout_mode = 2
+text = "Draw: 
+"
+
+[node name="Val" type="Label" parent="Control/MarginContainer/DebugHUD/Draw"]
+layout_mode = 2
+text = "ON"
+
+[node name="FrontRayGrp" type="VBoxContainer" parent="Control/MarginContainer/DebugHUD"]
+layout_mode = 2
+
+[node name="GroupName" type="Label" parent="Control/MarginContainer/DebugHUD/FrontRayGrp"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.598488, 0.551691, 1)
+text = "FRONT VISION"
+uppercase = true
+
+[node name="FrontConeAngle" type="HBoxContainer" parent="Control/MarginContainer/DebugHUD/FrontRayGrp"]
+layout_mode = 2
+
+[node name="Des" type="Label" parent="Control/MarginContainer/DebugHUD/FrontRayGrp/FrontConeAngle"]
+layout_mode = 2
+text = "ViewAngle:"
+
+[node name="Val" type="Label" parent="Control/MarginContainer/DebugHUD/FrontRayGrp/FrontConeAngle"]
+layout_mode = 2
+text = "Placeholder"
+
+[node name="Amount" type="HBoxContainer" parent="Control/MarginContainer/DebugHUD/FrontRayGrp"]
+layout_mode = 2
+
+[node name="Des" type="Label" parent="Control/MarginContainer/DebugHUD/FrontRayGrp/Amount"]
+layout_mode = 2
+text = "RayAmt:"
+
+[node name="Val" type="Label" parent="Control/MarginContainer/DebugHUD/FrontRayGrp/Amount"]
+layout_mode = 2
+text = "Placeholder"
+
+[node name="Length" type="HBoxContainer" parent="Control/MarginContainer/DebugHUD/FrontRayGrp"]
+layout_mode = 2
+
+[node name="Des" type="Label" parent="Control/MarginContainer/DebugHUD/FrontRayGrp/Length"]
+layout_mode = 2
+text = "RayLen:"
+
+[node name="Val" type="Label" parent="Control/MarginContainer/DebugHUD/FrontRayGrp/Length"]
+layout_mode = 2
+text = "Placeholder"
+
+[node name="PeripheralGrp" type="VBoxContainer" parent="Control/MarginContainer/DebugHUD"]
+layout_mode = 2
+
+[node name="GroupName" type="Label" parent="Control/MarginContainer/DebugHUD/PeripheralGrp"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.598488, 0.551691, 1)
+text = "periheral
+"
+uppercase = true
+
+[node name="Amount" type="HBoxContainer" parent="Control/MarginContainer/DebugHUD/PeripheralGrp"]
+layout_mode = 2
+
+[node name="Des" type="Label" parent="Control/MarginContainer/DebugHUD/PeripheralGrp/Amount"]
+layout_mode = 2
+text = "PRayAmt:"
+
+[node name="Val" type="Label" parent="Control/MarginContainer/DebugHUD/PeripheralGrp/Amount"]
+layout_mode = 2
+text = "Placeholder"
+
+[node name="Length" type="HBoxContainer" parent="Control/MarginContainer/DebugHUD/PeripheralGrp"]
+layout_mode = 2
+
+[node name="Des" type="Label" parent="Control/MarginContainer/DebugHUD/PeripheralGrp/Length"]
+layout_mode = 2
+text = "PRayLen:"
+
+[node name="Val" type="Label" parent="Control/MarginContainer/DebugHUD/PeripheralGrp/Length"]
+layout_mode = 2
+text = "Placeholder"

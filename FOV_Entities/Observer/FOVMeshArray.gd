@@ -21,4 +21,3 @@ func _ready():
 	m.mesh = arr_mesh
 	
 	add_child(m)
-

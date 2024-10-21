@@ -30,6 +30,11 @@ var FOVDraw: FOVDebug
 
 @export var vpMesh: MeshInstance2D
 
+#debug values
+var frontRayAmt: int = 0
+@export var debugUI: DebugUI
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	FOVmesh = get_node("FOV_Mesh")
@@ -65,7 +70,7 @@ func _draw():
 				var disToTarget    = global_position.distance_to(target.global_position)
 				draw_line(position, dirToTarget * disToTarget, Color.RED)
 				
-	#TODO: have raycastarray return array of viewpoints and then process it with mesh generation function
+	#have raycastarray return array of viewpoints and then process it with mesh generation function
 	FOVDraw.viewcastArray.clear()
 	var mesh_verticies: PackedVector2Array
 	#mesh_verticies.append(Vector2.ZERO)

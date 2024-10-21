@@ -11,7 +11,6 @@ func _ready():
 	var tween = create_tween()
 	
 	tween.tween_property(self, "lerp_num", max_num, 10)
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	print(lerp_num)
