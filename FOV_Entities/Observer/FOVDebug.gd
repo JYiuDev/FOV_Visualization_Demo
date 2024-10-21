@@ -3,6 +3,7 @@ class_name  FOVDebug
 
 
 @export var fow: FOV
+
 var viewcastArray: Array = []
 var updateDraw: bool = true
 var drawColor: Color = Color(0,0,0,0)

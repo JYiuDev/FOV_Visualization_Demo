@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://coudtlyh73adb"]
+[gd_scene load_steps=11 format=3 uid="uid://coudtlyh73adb"]
 
 [ext_resource type="Shader" path="res://Shaders/FOV_Cull.gdshader" id="1_duk0p"]
 [ext_resource type="PackedScene" uid="uid://k68dj1602unv" path="res://FOV_Entities/Observer/character.tscn" id="2_f2xj8"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://b8l5anamht3f4" path="res://FOV_Entities/Obstacles/Obstacle.tscn" id="4_irpvh"]
 [ext_resource type="Shader" path="res://Shaders/meshNormal.gdshader" id="4_u2yar"]
 [ext_resource type="Texture2D" uid="uid://cbkmghmkq1lxn" path="res://icon.svg" id="4_wmcx6"]
+[ext_resource type="PackedScene" uid="uid://6tir0vab6otn" path="res://UI/DebugUI.tscn" id="7_cmhjy"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rku2g"]
 viewport_path = NodePath("NormalMapVP")
@@ -114,6 +115,9 @@ scale = Vector2(0.3, 0.3)
 texture = ExtResource("4_wmcx6")
 
 [node name="NormalMesh" type="MeshInstance2D" parent="NormalMapVP/PlayerFollower"]
+
+[node name="DebugUi" parent="." node_paths=PackedStringArray("FOVEntity") instance=ExtResource("7_cmhjy")]
+FOVEntity = NodePath("../PlayerWContainer/PlayerVP/PhysicalWorld/Character/FOV")
 
 [editable path="PlayerWContainer/PlayerVP/PhysicalWorld/Character"]
 [editable path="PlayerWContainer/PlayerVP/PhysicalWorld/Target"]

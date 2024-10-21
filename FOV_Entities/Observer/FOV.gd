@@ -3,9 +3,13 @@ class_name FOV
 
 @export_category("FOV properties")
 @export var ringRadius: float
-@export var viewRadius: float 
-@export var viewAngle:  float
-
+@export var viewRadius: float
+signal viewAngleChange(newValue: float)
+@export var viewAngle:  float:
+	set(newValue):
+		viewAngle = newValue
+		viewAngleChange.emit(viewAngle)
+		
 #view angle transition
 @export var maxViewAngle: float
 @export var minViewAngle: float
