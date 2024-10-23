@@ -13,7 +13,6 @@ scale = Vector2(1, 1)
 z_index = 10
 
 [node name="FOV" parent="Character" index="2"]
-ringRadius = 60.0
 viewRadius = 350.0
 viewTransitionTime = 0.5
 ringResolution = 0.1

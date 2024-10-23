@@ -2,14 +2,24 @@ extends Node2D
 class_name FOV
 
 @export_category("FOV properties")
-@export var ringRadius: float
-@export var viewRadius: float
+signal periRadiusChange(newValue: float)
+@export var peripheralRadius: float:
+	set(newValue):
+		peripheralRadius = newValue
+		periRadiusChange.emit(peripheralRadius)
+signal viewRadiusChange(newValue: float)
+@export var viewRadius: float:
+	set(newValue):
+		viewRadius = newValue
+		viewRadiusChange.emit(viewRadius)
 signal viewAngleChange(newValue: float)
 @export var viewAngle:  float:
 	set(newValue):
 		viewAngle = newValue
-		viewAngleChange.emit(viewAngle)
-		
+		frontRayAmt = CalcFrontRayAmt()
+		periRayAmt = CalcPeriRayAmt()
+		viewAngleChange.emit(snapped(viewAngle,0.01))
+
 #view angle transition
 @export var maxViewAngle: float
 @export var minViewAngle: float
@@ -33,10 +43,18 @@ var FOVDraw: FOVDebug
 @export_range(0, 50) var edgeThreshhold: float
 
 @export var vpMesh: MeshInstance2D
+#DEBUG VALUES
+signal frontRayAmtChange(newValue: int)
+var frontRayAmt: int = 0:
+	set(newValue):
+		frontRayAmt = newValue
+		frontRayAmtChange.emit(frontRayAmt)
 
-#debug values
-var frontRayAmt: int = 0
-@export var debugUI: DebugUI
+signal periRayAmtChange(newValue: int)
+var periRayAmt: int = 0:
+	set(newValue):
+		periRayAmt = newValue
+		periRayAmtChange.emit(periRayAmt)
 
 
 # Called when the node enters the scene tree for the first time.
@@ -74,17 +92,18 @@ func _draw():
 				var disToTarget    = global_position.distance_to(target.global_position)
 				draw_line(position, dirToTarget * disToTarget, Color.RED)
 				
+
 	#have raycastarray return array of viewpoints and then process it with mesh generation function
 	FOVDraw.viewcastArray.clear()
 	var mesh_verticies: PackedVector2Array
 	#mesh_verticies.append(Vector2.ZERO)
-	var upper_ring: Dictionary = new_RaycastArray(-180.0, 180.0 - (viewAngle/2), ringRadius, ringResolution)
+	var upper_ring: Dictionary = new_RaycastArray(-180.0, 180.0 - (viewAngle/2), peripheralRadius, ringResolution)
 	mesh_verticies.append_array(upper_ring["viewpoints"])
 	FOVDraw.viewcastArray.append_array(upper_ring["viewcastArray"])
 	var fov: Dictionary = new_RaycastArray(-viewAngle/2, viewAngle, viewRadius, raycastResolution)
 	mesh_verticies.append_array(fov["viewpoints"])
 	FOVDraw.viewcastArray.append_array(fov["viewcastArray"])
-	var lower_ring: Dictionary = new_RaycastArray(0 + (viewAngle/2), 180.0 - (viewAngle/2), ringRadius, ringResolution)
+	var lower_ring: Dictionary = new_RaycastArray(0 + (viewAngle/2), 180.0 - (viewAngle/2), peripheralRadius, ringResolution)
 	mesh_verticies.append_array(lower_ring["viewpoints"])
 	FOVDraw.viewcastArray.append_array(lower_ring["viewcastArray"])
 	new_view_mesh(mesh_verticies)
@@ -210,7 +229,7 @@ func dirFromAngle(angleInDegree: float, global: bool) -> Vector2:
 	var radians: float = (angleInDegree) * PI/180
 	return Vector2(cos(radians), sin(radians))
 
-#give angle, return viewcastinfo
+#Give angle, return viewcastinfo
 func Viewcast(angle_local: float, ray_length: float) -> ViewcastInfo:
 	var ray_dir   = dirFromAngle(angle_local, false)
 	var local_dir = dirFromAngle(angle_local, true)
@@ -231,7 +250,12 @@ func SwitchViewState():
 		
 		viewState.REDUCE:
 			curr_viewState = viewState.EXPAND
-		
+
+func CalcFrontRayAmt() -> int:
+	return roundi(viewAngle * raycastResolution) + 2
+	
+func CalcPeriRayAmt() -> int:
+	return roundi((360 - viewAngle) * ringResolution) + 2
 
 #Subclass for RaycastInformation
 class ViewcastInfo:

@@ -52,7 +52,7 @@ scale = Vector2(1, 1)
 z_index = 10
 
 [node name="FOV" parent="PlayerWContainer/PlayerVP/PhysicalWorld/Character" index="2" node_paths=PackedStringArray("vpMesh")]
-ringRadius = 60.0
+peripheralRadius = 50.0
 viewRadius = 350.0
 viewTransitionTime = 0.5
 ringResolution = 0.1
