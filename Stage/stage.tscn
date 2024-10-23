@@ -18,12 +18,12 @@ shader_parameter/mask_texture = SubResource("ViewportTexture_rku2g")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_npp71"]
 shader = ExtResource("4_u2yar")
-shader_parameter/non_mesh_color = null
+shader_parameter/non_mesh_color = Color(0, 0, 0, 1)
 shader_parameter/fov_mesh_color = Color(1, 1, 1, 1)
 
 [node name="Stage" type="Node2D"]
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="FogBackGround" type="ColorRect" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -52,17 +52,14 @@ scale = Vector2(1, 1)
 z_index = 10
 
 [node name="FOV" parent="PlayerWContainer/PlayerVP/PhysicalWorld/Character" index="2" node_paths=PackedStringArray("vpMesh")]
-peripheralRadius = 50.0
 viewRadius = 350.0
 viewTransitionTime = 0.5
-ringResolution = 0.1
 raycastResolution = 0.75
 edgeThreshhold = 15.0
 vpMesh = NodePath("../../../../../NormalMapVP/PlayerFollower/NormalMesh")
 
-[node name="FOV_DebugDraw" parent="PlayerWContainer/PlayerVP/PhysicalWorld/Character/FOV" index="0" node_paths=PackedStringArray("fow")]
+[node name="FOV_DebugDraw" parent="PlayerWContainer/PlayerVP/PhysicalWorld/Character/FOV" index="0"]
 z_index = 3
-fow = NodePath("..")
 
 [node name="Camera2D" type="Camera2D" parent="PlayerWContainer/PlayerVP/PhysicalWorld/Character"]
 

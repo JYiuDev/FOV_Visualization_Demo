@@ -15,6 +15,7 @@ script = ExtResource("1_px71a")
 moveSpeed = 180.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 2
 rotation = 1.5708
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("1_vhn2i")
@@ -24,13 +25,17 @@ shape = SubResource("CircleShape2D_bylnx")
 
 [node name="FOV" type="Node2D" parent="."]
 script = ExtResource("2_cl2k0")
+peripheralRadius = 50.0
 viewRadius = 250.0
 viewAngle = 90.0
 maxViewAngle = 90.0
 minViewAngle = 20.0
+ringResolution = 0.1
+raycastResolution = 0.7
 
-[node name="FOV_DebugDraw" type="Node2D" parent="FOV"]
+[node name="FOV_DebugDraw" type="Node2D" parent="FOV" node_paths=PackedStringArray("fow")]
 z_index = 1
 script = ExtResource("2_j3h7k")
+fow = NodePath("..")
 
 [node name="FOV_Mesh" type="MeshInstance2D" parent="FOV"]
