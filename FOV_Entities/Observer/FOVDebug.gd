@@ -7,6 +7,7 @@ class_name  FOVDebug
 var viewcastArray: Array = []
 var updateDraw: bool = true
 var drawColor: Color = Color(0,0,0,0)
+var hitColor: Color = Color.DEEP_PINK
 
 func _ready():
 	pass
@@ -22,7 +23,7 @@ func _draw():
 		for i in viewcastArray.size():
 			var viewcast = viewcastArray[i] as ViewcastInfo
 			if viewcast.hit:
-				draw_line(position, viewcast.point, Color.DEEP_PINK)
+				draw_line(position, viewcast.point, hitColor)
 			else:
 				draw_line(position, viewcast.point, drawColor)
 				
@@ -33,8 +34,10 @@ func _process(_delta):
 		
 	if updateDraw:
 		drawColor = Color.BLACK
+		hitColor = Color.DEEP_PINK
 	else:
 		drawColor = Color.TRANSPARENT
+		hitColor = Color.TRANSPARENT
 	
 	queue_redraw()
 
