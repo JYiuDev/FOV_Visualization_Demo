@@ -42,3 +42,6 @@ func update_periRayAmt(value: int) -> void:
 	
 func update_periRayLen(value: float) -> void:
 	$Control/MarginContainer/DebugHUD/PeripheralGrp/Length/Val.text = str(value)
+func toggle_draw() -> void:
+	var textNode = $Control/MarginContainer/DebugHUD/Draw/Val
+	

@@ -1,6 +1,6 @@
 extends Node2D
 class_name FOV
-
+#TODO: Script is a bit long and needs more thorough documentation
 @export_category("FOV properties")
 signal periRadiusChange(newValue: float)
 @export var peripheralRadius: float:

@@ -1,10 +1,17 @@
 [gd_scene load_steps=4 format=3 uid="uid://6u1h08oqksxf"]
 
 [ext_resource type="PackedScene" uid="uid://k68dj1602unv" path="res://FOV_Entities/Observer/character.tscn" id="1_5x7to"]
-[ext_resource type="PackedScene" uid="uid://dufm7hl1icvwg" path="res://FOV_Entities/Targets/target.tscn" id="2_ttn1b"]
+[ext_resource type="PackedScene" uid="uid://dufm7hl1icvwg" path="res://FOV_Entities/NPCs/enemy.tscn" id="2_ttn1b"]
 [ext_resource type="PackedScene" uid="uid://b8l5anamht3f4" path="res://FOV_Entities/Obstacles/Obstacle.tscn" id="3_x4h42"]
 
 [node name="PhysicalWorld" type="Node2D"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -90
+offset_left = -800.0
+offset_top = -450.0
+offset_right = 800.0
+offset_bottom = 500.0
 
 [node name="Character" parent="." instance=ExtResource("1_5x7to")]
 scale = Vector2(1, 1)
@@ -15,7 +22,6 @@ z_index = 10
 [node name="FOV" parent="Character" index="2"]
 viewRadius = 350.0
 viewTransitionTime = 0.5
-ringResolution = 0.1
 raycastResolution = 0.75
 edgeThreshhold = 15.0
 
