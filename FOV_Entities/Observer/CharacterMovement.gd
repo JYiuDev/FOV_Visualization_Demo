@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name FOV_Character
 
 @export_range(0,500) var moveSpeed: float
 @onready var fow: FOV = $FOV

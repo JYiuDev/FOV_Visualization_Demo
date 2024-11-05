@@ -12,5 +12,5 @@ void fragment() {
 	if(current_color != fov_mesh_color)
 	{
 		COLOR = non_mesh_color;
-	} 
+	}
 }

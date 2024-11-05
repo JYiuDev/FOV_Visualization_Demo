@@ -13,6 +13,7 @@ scale = Vector2(0.999845, 0.999845)
 collision_mask = 6
 script = ExtResource("1_px71a")
 moveSpeed = 180.0
+metadata/_edit_lock_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 2
