@@ -15,6 +15,10 @@ run/main_scene="res://FOV_Entities/Observer/character.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Manager="*res://FOV_Entities/GlobalSingleton/Manager.gd"
+
 [display]
 
 window/size/viewport_width=1600
