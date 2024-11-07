@@ -6,7 +6,8 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_15nmi"]
 shader = ExtResource("2_6uolx")
-shader_parameter/player_pos = null
+shader_parameter/viewDistance = 0.0
+shader_parameter/player_pos = Vector2(0.69, 0.69)
 
 [node name="Enemy" type="CharacterBody2D"]
 scale = Vector2(0.999845, 0.999845)

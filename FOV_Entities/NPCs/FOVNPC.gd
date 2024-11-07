@@ -8,10 +8,12 @@ var sprite: Sprite2D
 func _ready():
 	player = Manager.player
 	sprite = $Sprite2D
+	sprite.material.set_shader_parameter("viewDistance",player.fow.viewRadius)
 	
 func _process(delta):
-	if _is_in_range():
-		_is_in_vision()
+	#if _is_in_range():
+		#_is_in_vision()
+	sprite.material.set_shader_parameter("player_pos",player.position)
 	
 func _is_in_vision() -> bool:
 	if player:
