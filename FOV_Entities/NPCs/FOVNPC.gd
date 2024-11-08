@@ -8,13 +8,11 @@ var sprite: Sprite2D
 func _ready():
 	player = Manager.player
 	sprite = $Sprite2D
-	sprite.material.set_shader_parameter("viewDistance",player.fow.viewRadius)
-	
-func _process(delta):
-	#if _is_in_range():
-		#_is_in_vision()
-	sprite.material.set_shader_parameter("player_pos",player.position)
-	
+	if(Manager.fov_texture):
+		sprite.material.set_shader_parameter("mask_texture",Manager.fov_texture)
+	else :
+		print("NO FOV TEXTURE")
+
 func _is_in_vision() -> bool:
 	if player:
 		var player_dir:Vector2 = player.getFacing().normalized()
